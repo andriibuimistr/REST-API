@@ -8,7 +8,6 @@ from resources.user import UserRegister
 from security import authenticate, identity
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
-from db import db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
@@ -18,14 +17,6 @@ app.secret_key = 'key'
 # The next line is not from the course. Is needed to make jwt_required work when there is no token in a request
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
-
-db.init_app(app)
-
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 
 jwt = JWT(app, authenticate, identity)
 
